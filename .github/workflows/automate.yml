@@ -1,4 +1,4 @@
-name: run python test
+name: Pull latest changes and deploy to EC2
 
 on:
   push:
@@ -6,16 +6,14 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps: 
+  deploy:
+    runs-on: [self-hosted,Linux,X64]
+
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install Python 3
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.x  # Replace "x" with the desired version of Python (e.g., 3.9)
-    - name: Install Dependencies
+
+    - name: Pull latest changes
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        cd /var/www/NGINX/
+        git pull origin main
